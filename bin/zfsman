@@ -9,8 +9,7 @@
 
 if [ $# -eq 0 ]
 then
-echo "zfsman v0.1"
-echo "H.B. Kuiper - 2020.05.15"
+echo "zfsman v0.1 - Wizard of z/OS 2020"
 echo ""
 echo "usage: $0 <dir_name> [-dry]"
 echo ""
