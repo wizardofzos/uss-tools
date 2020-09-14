@@ -27,3 +27,4 @@
 *.xlsm binary
 *.obj binary
 *.bin binary
+ZDO.USSTOOLS.XMIT git-encoding=BINARY zos-working-tree-encoding=BINARY binary
