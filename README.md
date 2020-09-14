@@ -38,7 +38,7 @@ Ready>
 zfsresize will grow (or shrink) an aggregate to be the desired size
 
 ```bash
-UReady> bin/zfsman /zdo/rocket
+Ready> bin/zfsman /zdo/rocket
 zfsman v0.1
 
 Directory : /zdo/rocket
