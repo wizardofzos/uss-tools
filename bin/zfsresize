@@ -7,10 +7,17 @@
 
 if [ $# -eq 0 ]
 then
-echo "zfsresize v0.1 Wizard of z/OS 2020"
+echo "zfsresize v0.2 Wizard of z/OS 2020"
 echo ""
 echo "usage: $0 <dir_name> <size>"
 echo ""
+echo "zfsresize will grow, or shrink a zfs to the requested size"
+echo ""
+echo ""
+echo "Requirements: Grow: UID(0) and read to IOEFSPRM or PARMLIB alternative, or"
+echo "              READ access to SUPERUSER.FILESYS.PFSCTL in UNIXPRIV"
+echo "              Shrink : UPDATE to the VSAM containing the ZFS"
+
 exit 4
 fi
 

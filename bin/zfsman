@@ -9,13 +9,16 @@
 
 if [ $# -eq 0 ]
 then
-echo "zfsman v0.1 - Wizard of z/OS 2020"
+echo "zfsman v0.2 - Wizard of z/OS 2020"
 echo ""
 echo "usage: $0 <dir_name> [-dry]"
 echo ""
 echo "Will resize a zfs to be at 70% capacity"
 echo "Options: -dry When using -dry no action will be performed"
 echo ""
+echo "Requirements: Grow: UID(0) and read to IOEFSPRM or PARMLIB alternative, or"
+echo "              READ access to SUPERUSER.FILESYS.PFSCTL in UNIXPRIV"
+echo "              Shrink : UPDATE to the VSAM containing the ZFS" 
 exit 4
 fi
 
