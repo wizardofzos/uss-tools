@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# zfsman - Give a zFS a 'better' allocation
+#
+# usage: zfsman <dir_name> [-dry]
+#
+# zfsman will grow (or shrink) a zfs to result in a 70%
+# usage factor (capacity).
+
+if [ $# -eq 0 ]
+then
+echo "zfsman v0.2 - Wizard of z/OS 2020"
+echo ""
+echo "usage: $0 <dir_name> [-dry]"
+echo ""
+echo "Will resize a zfs to be at 70% capacity"
+echo "Options: -dry When using -dry no action will be performed"
+echo ""
+echo "Requirements: Grow: UID(0) and read to IOEFSPRM or PARMLIB alternative, or"
+echo "              READ access to SUPERUSER.FILESYS.PFSCTL in UNIXPRIV"
+echo "              Shrink : UPDATE to the VSAM containing the ZFS"
+exit 4
+fi
+
+echo "zfsman v0.1"
+echo ""
+
+ok="N"
+[ -d $1 ] && ok="Y"
+if [ "$ok" != "Y" ]
+then
+echo "That directory ($1) does not exist!"
+echo "Terminating..."
+exit 4
+fi
+
+dfoutput=`df -kP $1 | tail -1`
+fs=`echo $dfoutput | cut -d " " -f 1`
+size=`echo $dfoutput | cut -d " " -f 2`
+used=`echo $dfoutput | cut -d " " -f 3`
+available=`echo $dfoutput | cut -d " " -f 4`
+capacity=`echo $dfoutput | cut -d " " -f 5 | sed 's/.$//'`
+
+echo "Directory : $1"
+echo "zFS Aggregate : $fs"
+echo "Size : $size"
+echo "Used/Available : $used / $available"
+echo "Current Utilization : $capacity%"
+
+let newsize=used/70
+let newsize=newsize*100
+echo "Suggested New Size : $newsize"
+
+if [ $newsize -gt $size ]
+then
+cmd="zfsadm grow -aggregate $fs -size $newsize"
+else
+cmd="zfsadm shrink -aggregate $fs -size $newsize"
+fi
+
+dry="N"
+if [ $# -eq 2 ]
+then
+if [ "$2" = "-dry" ]
+then
+dry="Y"
+else
+dry="N"
+fi
+fi
+
+if [ "$dry" = "N" ]
+then
+echo ""
+echo "Executing : $cmd"
+echo ""
+echo "Please stand by..."
+eval $cmd
+fi

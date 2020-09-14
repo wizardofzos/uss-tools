@@ -1,0 +1,18 @@
+uss-tools
+
+Installation Instructions
+
+1. Logon to your USS environment (via SSH not TSO OMVS lol)
+2. Execute the following commands :
+   - cd /path/to/where/you/want/the/scripts (or mkdir it first)
+   - cp "//'THIS.PDS(ZFSMAN)'" zfsman
+   - cp "//'THIS.PDS(ZFSRSZE)'" zfsresize
+   - chmod +x zfsman zfsresize
+   - make sure /path/to/where/you/want/the/scripts is in your PATH
+3. From now you can use the zfsman and zfsresize commands as shown
+   in https://github.com/wizardofzos/uss-tools/blob/master/README.md
+
+
+Hope they're usefull!
+
+Cheers!

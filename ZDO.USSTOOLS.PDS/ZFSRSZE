@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# zfsresize - Grow or shrink a zFS to desired size
+#
+# usage: zfsresize <dir_name> <size>
+#
+
+if [ $# -eq 0 ]
+then
+echo "zfsresize v0.2 Wizard of z/OS 2020"
+echo ""
+echo "usage: $0 <dir_name> <size>"
+echo ""
+echo "zfsresize will grow, or shrink a zfs to the requested size"
+echo ""
+echo ""
+echo "Requirements: Grow: UID(0) and read to IOEFSPRM or PARMLIB alternative, or"
+echo "              READ access to SUPERUSER.FILESYS.PFSCTL in UNIXPRIV"
+echo "              Shrink : UPDATE to the VSAM containing the ZFS"
+
+exit 4
+fi
+
+echo "zfsresize v0.1"
+echo ""
+
+ok="N"
+[ -d $1 ] && ok="Y"
+if [ "$ok" != "Y" ]
+then
+echo "That directory ($1) does not exist!"
+echo "Terminating..."
+exit 4
+fi
+
+dfoutput=`df -kP $1 | tail -1`
+fs=`echo $dfoutput | cut -d " " -f 1`
+size=`echo $dfoutput | cut -d " " -f 2`
+used=`echo $dfoutput | cut -d " " -f 3`
+available=`echo $dfoutput | cut -d " " -f 4`
+capacity=`echo $dfoutput | cut -d " " -f 5 | sed 's/.$//'`
+
+echo "Directory : $1"
+echo "zFS Aggregate : $fs"
+echo "Size : $size"
+echo "Used/Available : $used / $available"
+echo "Current Utilization : $capacity%"
+
+newsize=$2
+
+echo "Requested New Size : $newsize"
+
+if [ $newsize -gt $size ]
+then
+cmd="zfsadm grow -aggregate $fs -size $newsize"
+else
+cmd="zfsadm shrink -aggregate $fs -size $newsize"
+fi
+
+echo ""
+echo "Executing : $cmd"
+echo ""
+echo "Please stand by..."
+eval $cmd
+
+dfoutput=`df -kP $1 | tail -1`
+fs=`echo $dfoutput | cut -d " " -f 1`
+size=`echo $dfoutput | cut -d " " -f 2`
+used=`echo $dfoutput | cut -d " " -f 3`
+available=`echo $dfoutput | cut -d " " -f 4`
+capacity=`echo $dfoutput | cut -d " " -f 5 | sed 's/.$//'`
+
+echo "Directory : $1"
+echo "zFS Aggregate : $fs"
+echo "Size : $size"
+echo "Used/Available : $used / $available"
+echo "Current Utilization : $capacity%"
