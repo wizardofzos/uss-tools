@@ -56,3 +56,6 @@ ZDO.ROCKET.ZFS (R/W COMP): 130000 K free out of total 433440
 Ready>
 ```
 
+### bin/reacl
+
+reacl will check all underlying files and folders from the specified path to see if they match the defaults 'as if they were just created' (so based on the current ACL defaults). A script is generated to set the correct ACL's
